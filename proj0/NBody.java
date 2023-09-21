@@ -1,5 +1,5 @@
 public class NBody {
-    static final String bgDir = "images//starfield.jpg"; // Set the background directory address.
+    private static final String bgDir = "images//starfield.jpg"; // Set the background directory address.
     public static double readRadius(String dir) {
         In in = new In(dir);
         int count = in.readInt();

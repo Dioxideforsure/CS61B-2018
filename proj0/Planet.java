@@ -1,11 +1,11 @@
 public class Planet {
-    double xxPos;
-    double yyPos;
-    double xxVel;
-    double yyVel;
-    double mass;
-    String imgFileName;
-    static final double graCon = 6.67e-11; //The gravitational constant G = 6.67 * 10 ^ -11
+    public double xxPos;
+    public double yyPos;
+    public double xxVel;
+    public double yyVel;
+    public double mass;
+    public String imgFileName;
+    private static final double graCon = 6.67e-11; //The gravitational constant G = 6.67 * 10 ^ -11
 
     public Planet(double xP, double yP, double xV, double yV, double m, String img) {
         xxPos = xP;
@@ -29,7 +29,7 @@ public class Planet {
         return Math.sqrt(square(xxPos - p.xxPos) + square(yyPos - p.yyPos));
     }
 
-    public double square(double n) {
+    private double square(double n) {
         return n * n;
     }   //Use square function to simplify the calcDistance function in Square compute.
 
@@ -40,19 +40,13 @@ public class Planet {
     public double calcForceExertedByX(Planet p) {
         double xForce; // Easy to conflict if xForce is negative.
         xForce = calcForceExertedBy(p) * (xxPos - p.xxPos) / calcDistance(p);
-        if (xForce >= 0) {
-            return xForce;
-        }
-        else return -xForce;
+        return xForce;
     }
 
     public double calcForceExertedByY(Planet p) {
         double yForce; // Easy to conflict if yForce is negative.
         yForce = calcForceExertedBy(p) * (yyPos - p.yyPos) / calcDistance(p);
-        if (yForce >= 0) {
-            return yForce;
-        }
-        else return -yForce;
+        return yForce;
     }
 
     public double calcNetForceExertedByX(Planet[] allplanet) {
