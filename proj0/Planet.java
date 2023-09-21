@@ -39,13 +39,13 @@ public class Planet {
 
     public double calcForceExertedByX(Planet p) {
         double xForce; // Easy to conflict if xForce is negative.
-        xForce = calcForceExertedBy(p) * (xxPos - p.xxPos) / calcDistance(p);
+        xForce = calcForceExertedBy(p) * (p.xxPos - xxPos) / calcDistance(p);
         return xForce;
     }
 
     public double calcForceExertedByY(Planet p) {
         double yForce; // Easy to conflict if yForce is negative.
-        yForce = calcForceExertedBy(p) * (yyPos - p.yyPos) / calcDistance(p);
+        yForce = calcForceExertedBy(p) * (p.yyPos - yyPos) / calcDistance(p);
         return yForce;
     }
 
