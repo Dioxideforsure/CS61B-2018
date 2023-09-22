@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class NBody {
     private static final String bgDir = "images//starfield.jpg"; // Set the background directory address.
     public static double readRadius(String dir) {
@@ -12,7 +14,7 @@ public class NBody {
         int count = in.readInt();
         double radius = in.readDouble();
         Planet[] planets = new Planet[count];
-        for (int i = 0; i < planets.length; i++) {
+        for (int i = 0; i < count; i++) {
             double xxPos = in.readDouble();
             double yyPos = in.readDouble();
             double xxVel = in.readDouble();
@@ -29,6 +31,7 @@ public class NBody {
         double dt = Double.parseDouble(args[1]);
         String filename = args[2];
         Planet[] planets = readPlanets(filename);
+        System.out.println(Arrays.stream(planets).toList());
         double radius = readRadius(filename);
         StdDraw.enableDoubleBuffering(); // Make sure the effect would load in buffering.
         StdDraw.setScale(-radius, radius); // Set the universe scale to make appropriate
@@ -51,6 +54,13 @@ public class NBody {
             StdDraw.show();// Show the planets from the buffering.
             StdDraw.pause(10);// Don't get blinking for short vision stay.
             time += dt;// Adding time to proceeding.
+        }
+        StdOut.printf("%d\n", planets.length);
+        StdOut.printf("%.2e\n", radius);
+        for (int i = 0; i < planets.length; i++) {
+            StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
+                    planets[i].xxPos, planets[i].yyPos, planets[i].xxVel,
+                    planets[i].yyVel, planets[i].mass, planets[i].imgFileName);
         }
     }
 }

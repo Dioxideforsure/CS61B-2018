@@ -85,6 +85,6 @@ public class Planet {
     }
 
     public void draw() {
-       StdDraw.picture(this.xxPos, this.yyPos, "image//" + imgFileName);// Print each planet on proper position from the image.
+       StdDraw.picture(this.xxPos, this.yyPos, "images//" + imgFileName);// Print each planet on proper position from the image.
     }
 }
