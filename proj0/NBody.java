@@ -31,7 +31,6 @@ public class NBody {
         double dt = Double.parseDouble(args[1]);
         String filename = args[2];
         Planet[] planets = readPlanets(filename);
-        System.out.println(Arrays.stream(planets).toList());
         double radius = readRadius(filename);
         StdDraw.enableDoubleBuffering(); // Make sure the effect would load in buffering.
         StdDraw.setScale(-radius, radius); // Set the universe scale to make appropriate
