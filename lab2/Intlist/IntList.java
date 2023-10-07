@@ -102,6 +102,9 @@ public class IntList {
         if (A == null) {
             return B;
         }
+        if (B != null) {
+            return A;
+        }
         IntList pre = new IntList(A.first, null);
         IntList pck = pre;
         while (A.rest != null) {
