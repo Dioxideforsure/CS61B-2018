@@ -1,40 +1,46 @@
-import java.util.Arrays;
-
 public class ArrayDeque<T> {
-    private T[] ArrayDeque;
+    private T[] arrayDeque;
     private int size;
     private int head;
     private int tail;
-    private int capacity = 2000;
+    private boolean isIn = false;
+    private int cap;
     public ArrayDeque() {
-        ArrayDeque = (T[]) new Object[capacity];
+        int capacity = 8;
+        cap = capacity;
+        arrayDeque = (T[]) new Object[capacity];
         size = 0;
-        head = tail = 0;
+        head = 0;
+        tail = 1;
     }
 
     public void addFirst(T item) {
-        if (head == 0) {
-            ArrayDeque[head] = item;
+        if (isNotFull()) {
+            arrayDeque[head] = item;
+            if (head - 1 < 0) {
+                head = arrayDeque.length - 1;
+            } else {
+                head--;
+            }
         } else {
-            T[] mid = (T[]) new Object[capacity * 2];
-            System.arraycopy(ArrayDeque, 0, mid, 1, size);
-            mid[0] = item;
-            ArrayDeque = mid;
+            resize();
+            arrayDeque[head] = item;
+            head--;
         }
-        tail++;
+        isIn = true;
         size++;
     }
 
     public void addLast(T item) {
-        if (tail < capacity - 1) {
-            ArrayDeque[tail] = item;
+        if (isNotFull()) {
+            arrayDeque[tail] = item;
+            tail = (tail + 1) % (arrayDeque.length - 1);
         } else {
-            T[] mid = (T[]) new Object[capacity * 2];
-            System.arraycopy(ArrayDeque, 0, mid, 0, size);
-            mid[tail] = item;
-            ArrayDeque = mid;
+            resize();
+            arrayDeque[tail] = item;
+            tail++;
         }
-        tail++;
+        isIn = true;
         size++;
     }
 
@@ -43,10 +49,17 @@ public class ArrayDeque<T> {
     }
 
     public void printDeque() {
-        for (int i = head; i < tail; i++) {
-            System.out.print(ArrayDeque[i]);
-            System.out.print(" ");
+        if (size == 0) {
+            System.out.println("Deque is empty!");
+            return;
         }
+        for (T elem:
+             arrayDeque) {
+            if (elem != null) {
+                System.out.print(elem + " ");
+            }
+        }
+        System.out.println();
     }
 
     public int size() {
@@ -54,24 +67,30 @@ public class ArrayDeque<T> {
     }
 
     public T removeFirst() {
-        if (size == 0) {
+        if (isEmpty()) {
             return null;
         }
-        T item = ArrayDeque[head];
-        ArrayDeque[head] = null;;
-        head++;
+        head = (head + 1) % (arrayDeque.length);
+        T item = arrayDeque[head];
+        arrayDeque[head] = null;
         size--;
+        isIn = false;
         return item;
     }
 
     public T removeLast() {
-        if (size == 0) {
+        if (isEmpty()) {
             return null;
         }
-        tail--;
+        if (tail - 1 < 0) {
+            tail = arrayDeque.length - 1;
+        } else {
+            tail--;
+        }
         size--;
-        T item = ArrayDeque[tail];
-        ArrayDeque[tail] = null;
+        T item = arrayDeque[tail];
+        arrayDeque[tail] = null;
+        isIn = false;
         return item;
     }
 
@@ -79,6 +98,20 @@ public class ArrayDeque<T> {
         if (index >= tail || index < head) {
             return null;
         }
-        return ArrayDeque[index];
+        return arrayDeque[index];
+    }
+
+    private boolean isNotFull() {
+        return head != tail || !isIn;
+    }
+
+    private void resize() {
+        int newCapacity = cap + cap / 2;
+        T[] newArray = (T[]) new Object[newCapacity];
+        System.arraycopy(arrayDeque, 0, newArray, 0, tail);
+        System.arraycopy(arrayDeque, head, newArray, newCapacity + head - cap, arrayDeque.length - tail);
+        head = newCapacity + head - cap;
+        cap = newCapacity;
+        arrayDeque = newArray;
     }
 }

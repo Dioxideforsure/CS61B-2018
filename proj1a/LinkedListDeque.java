@@ -1,32 +1,30 @@
 public class LinkedListDeque<T> {
     private class LinkedNode {
         private LinkedNode next;
-        private T item;
+        private final T item;
 
         public LinkedNode(T item, LinkedNode next) {
             this.item = item;
             this.next = next;
         }
     }
+
     private int size;
     private LinkedNode head;
     private LinkedNode tail;
-    public LinkedListDeque() {
-        head = tail = new LinkedNode(null, null);
-        size = 0;
-    }
+    private LinkedNode sentinel;
 
-    private LinkedListDeque(T item) {
-        head = new LinkedNode(null, null);
-        head.next = tail = new LinkedNode(item, null) ;
-        size = 1;
+    public LinkedListDeque() {
+        head = tail = sentinel = new LinkedNode(null, null);
+        size = 0;
     }
 
     public void addFirst(T item) {
         LinkedNode p = head;
         p.next = new LinkedNode(item, head.next);
-        if (size == 0)
+        if (size == 0) {
             tail = p.next;
+        }
         size++;
     }
 
@@ -45,6 +43,10 @@ public class LinkedListDeque<T> {
     }
 
     public void printDeque() {
+        if (isEmpty()) {
+            System.out.println("Deque is empty!");
+            return;
+        }
         LinkedNode p = head.next;
         while (p != null) {
             System.out.print(p.item.toString());
@@ -54,7 +56,7 @@ public class LinkedListDeque<T> {
     }
 
     public T removeFirst() {
-        if (size == 0) {
+        if (isEmpty()) {
             return null;
         }
         T item = head.next.item;
@@ -89,9 +91,20 @@ public class LinkedListDeque<T> {
             return null;
         }
         LinkedNode p = head;
-        for (int i = 0; i <= index; i++) {
+        for (int i = 0; i < index; i++) {
             p = p.next;
         }
         return p.item;
+    }
+
+    public T getRecursive(int index) {
+        if (index > size) {
+            return null;
+        }
+        if (index == 0) {
+            return sentinel.item;
+        }
+        sentinel = sentinel.next;
+        return getRecursive(index - 1);
     }
 }
