@@ -3,7 +3,7 @@ public class ArrayDeque<T> {
     private int size;
     private int head;
     private int tail;
-    private boolean isIn = false;
+    private boolean isIn;
     private int cap;
     public ArrayDeque() {
         int capacity = 8;
@@ -12,6 +12,7 @@ public class ArrayDeque<T> {
         size = 0;
         head = 0;
         tail = 1;
+        isIn = false;
     }
 
     public void addFirst(T item) {
@@ -91,14 +92,32 @@ public class ArrayDeque<T> {
         T item = arrayDeque[tail];
         arrayDeque[tail] = null;
         isIn = false;
+        int newCapacity = arrayDeque.length - 1;
+        T[] newArray = (T[]) new Object[newCapacity];
+        if (tail > head) {
+            System.arraycopy(arrayDeque, head + 1, newArray, 0, tail - head);
+        } else {
+            System.arraycopy(arrayDeque, 0, newArray, 0, tail - 1);
+            System.arraycopy(arrayDeque, head, newArray, 0, tail);
+
+        }
         return item;
     }
 
     public T get(int index) {
-        if (index >= tail || index < head) {
+        if (index < 0 || index > size() || isEmpty()) {
             return null;
         }
-        return arrayDeque[index];
+        if (head < tail) {
+            return arrayDeque[head + index];
+        } else if (head > tail) {
+            if (head + index < cap) {
+                return arrayDeque[head + index];
+            } else {
+                return arrayDeque[(head + index) % cap];
+            }
+        }
+        return null;
     }
 
     private boolean isNotFull() {
@@ -106,7 +125,7 @@ public class ArrayDeque<T> {
     }
 
     private void resize() {
-        int newCapacity = cap + cap / 2;
+        int newCapacity = cap * 5 / 4;
         T[] newArray = (T[]) new Object[newCapacity];
         System.arraycopy(arrayDeque, 0, newArray, 0, tail);
         System.arraycopy(arrayDeque, head, newArray, newCapacity + head - cap, arrayDeque.length - tail);

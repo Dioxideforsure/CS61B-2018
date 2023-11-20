@@ -60,7 +60,7 @@ public class LinkedListDeque<T> {
             return null;
         }
         T item = head.next.item;
-        head = head.next;
+        head.next = head.next.next;
         size--;
         return item;
     }
@@ -69,7 +69,7 @@ public class LinkedListDeque<T> {
         if (size == 0) {
             return null;
         }
-        LinkedNode p = head;
+        LinkedNode p = sentinel;
         T item;
         if (size == 1) {
             item = tail.item;
@@ -79,8 +79,9 @@ public class LinkedListDeque<T> {
             while (p.next.next != null) {
                 p = p.next;
             }
-            item = p.item;
+            item = p.next.item;
             tail = p;
+            tail.next = null;
             size--;
         }
         return item;
