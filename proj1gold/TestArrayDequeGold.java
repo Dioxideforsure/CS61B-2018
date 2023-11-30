@@ -16,13 +16,13 @@ public class TestArrayDequeGold {
                 sad.addFirst(i);
                 ads.addFirst(i);
                 holder++;
-                msg.append("addFirst ").append("(").append(i).append(")").append(" \n");
+                msg.append("addFirst").append("(").append(i).append(")").append(" \n");
                 assertEquals(msg.toString(), ads.get(0), sad.get(0));
             } else if (prob < 0.5) {
                 sad.addLast(i);
                 ads.addLast(i);
                 holder++;
-                msg.append("addLast ").append("(").append(i).append(")").append(" \n");
+                msg.append("addLast").append("(").append(i).append(")").append(" \n");
                 assertEquals(msg.toString(), ads.get(holder - 1), sad.get(holder - 1));
             } else if (prob < 0.75) {
                 if (ads.isEmpty()) {
@@ -31,7 +31,7 @@ public class TestArrayDequeGold {
                     continue;
                 }
                 holder--;
-                msg.append("removeFirst ").append("(").append(")").append(" \n");
+                msg.append("removeFirst").append("(").append(")").append(" \n");
                 assertEquals(msg.toString(), ads.removeFirst(), sad.removeFirst());
             } else {
                 if (ads.isEmpty()) {
@@ -40,7 +40,7 @@ public class TestArrayDequeGold {
                     continue;
                 }
                 holder--;
-                msg.append("removeLast ").append("(").append(")").append(" \n");
+                msg.append("removeLast").append("(").append(")").append(" \n");
                 assertEquals(msg.toString(), ads.removeLast(), sad.removeLast());
             }
         }
