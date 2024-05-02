@@ -6,6 +6,7 @@ public class Percolation {
     private boolean[][] blockSite;  // if false, the site is blocked. vice versa.
     private final int length;
     private WeightedQuickUnionUF site1;
+    private WeightedQuickUnionUF site2;
     private int count;
 
     public Percolation(int N) {
@@ -15,13 +16,15 @@ public class Percolation {
         blockSite = new boolean[N][N];
         length = N;
         site1 = new WeightedQuickUnionUF(N * N);
+        site2 = new WeightedQuickUnionUF(N * N);
 
             for (int i = 0; i < length; i++) {
                 site1.union(0, i);
+                site2.union(0, i);
             } // Union the whole top row, which will make the top row full.
-            /*for (int i = toOneDimension(length - 1, 0); i < toOneDimension(length - 1, length); i++) {
-                site1.union(i, toOneDimension(length - 1, length) - 1);
-            }*/
+            for (int i = toOneDimension(length - 1, 0); i < toOneDimension(length - 1, length); i++) {
+                site2.union(i, toOneDimension(length - 1, length) - 1);
+            }
          // Union the whole bottom row, which will make the bottom row full.
         count = 0;
     }// create N-by-N grid, with all sites initially blocked
@@ -34,17 +37,21 @@ public class Percolation {
                 if (row == 0) {
                     if (isOpen(row + 1, col)) {
                         site1.union(toOneDimension(row, col), toOneDimension(row + 1, col));
+                        site2.union(toOneDimension(row, col), toOneDimension(row + 1, col));
                     }
                 } else if (row == length - 1) {
                     if (isOpen(row - 1, col)) {
                         site1.union(toOneDimension(row, col), toOneDimension(row - 1, col));
+                        site2.union(toOneDimension(row, col), toOneDimension(row - 1, col));
                     }
                 } else {
                     if (isOpen(row - 1, col)) {
                         site1.union(toOneDimension(row, col), toOneDimension(row - 1, col));
+                        site2.union(toOneDimension(row, col), toOneDimension(row - 1, col));
                     }
                     if (isOpen(row + 1, col)) {
                         site1.union(toOneDimension(row, col), toOneDimension(row + 1, col));
+                        site2.union(toOneDimension(row, col), toOneDimension(row + 1, col));
                     }
                 }// Inspect whether should union with neighbor
                 // The condition has 3 types:
@@ -54,16 +61,22 @@ public class Percolation {
                 if (col == 0) {
                     if (isOpen(row, col + 1)) {
                         site1.union(toOneDimension(row, col), toOneDimension(row, col + 1));
+                        site2.union(toOneDimension(row, col), toOneDimension(row, col + 1));
                     }
                 } else if (col == length - 1) {
                     if (isOpen(row, col - 1)) {
                         site1.union(toOneDimension(row, col), toOneDimension(row, col - 1));
+                        site2.union(toOneDimension(row, col), toOneDimension(row, col - 1));
                     }
                 } else {
-                    if (isOpen(row, col - 1))
+                    if (isOpen(row, col - 1)) {
                         site1.union(toOneDimension(row, col), toOneDimension(row, col - 1));
-                    if (isOpen(row, col + 1))
+                        site2.union(toOneDimension(row, col), toOneDimension(row, col - 1));
+                    }
+                    if (isOpen(row, col + 1)) {
                         site1.union(toOneDimension(row, col), toOneDimension(row, col + 1));
+                        site2.union(toOneDimension(row, col), toOneDimension(row, col + 1));
+                    }
                 }// Inspect whether should union with neighbor
                 // The condition has 3 types:
                 // 1. The first column (1st column), whether union with the leftmost column (0th column).
@@ -95,7 +108,7 @@ public class Percolation {
         if (length == 1){
             return blockSite[0][0];
         }
-            return site1.connected(0, length * length - 1);
+            return site2.connected(0, length * length - 1);
     }              // does the system percolate?
 
     private int toOneDimension(int row, int col) {
