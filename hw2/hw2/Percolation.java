@@ -15,12 +15,14 @@ public class Percolation {
         blockSite = new boolean[N][N];
         length = N;
         site1 = new WeightedQuickUnionUF(N * N);
-        for (int i = 0; i < length; i++) {
-            site1.union(0, i);
-        } // Union the whole top row, which will make the top row full.
-        for (int i = toOneDimension(length - 1, 0); i < toOneDimension(length - 1, length); i++) {
-            site1.union(i, toOneDimension(length - 1, length) - 1);
-        }  // Union the whole bottom row, which will make the bottom row full.
+
+            for (int i = 0; i < length; i++) {
+                site1.union(0, i);
+            } // Union the whole top row, which will make the top row full.
+            /*for (int i = toOneDimension(length - 1, 0); i < toOneDimension(length - 1, length); i++) {
+                site1.union(i, toOneDimension(length - 1, length) - 1);
+            }*/
+         // Union the whole bottom row, which will make the bottom row full.
         count = 0;
     }// create N-by-N grid, with all sites initially blocked
 
@@ -28,44 +30,46 @@ public class Percolation {
         wrongArgument(row, col);
         if (!isOpen(row, col)) {
             blockSite[row][col] = true;
-            if (row == 0) {
-                if (isOpen(row + 1, col)) {
-                    site1.union(toOneDimension(row, col), toOneDimension(row + 1, col));
-                }
-            } else if (row == length - 1) {
-                if (isOpen(row - 1, col)) {
-                    site1.union(toOneDimension(row, col), toOneDimension(row - 1, col));
-                }
-            } else {
-                if (isOpen(row - 1, col)) {
-                    site1.union(toOneDimension(row, col), toOneDimension(row - 1, col));
-                }
-                if (isOpen(row + 1, col)) {
-                    site1.union(toOneDimension(row, col), toOneDimension(row + 1, col));
-                }
-            }// Inspect whether should union with neighbor
-            // The condition has 3 types:
-            // 1. The first row (1st row), whether union with the top row (0th row).
-            // 2. The last row (n-2th row), whether union with the bottom row (n-1th row).
-            // 3. The middle row, whether union with neighbor.
-            if (col == 0) {
-                if (isOpen(row, col + 1)) {
-                    site1.union(toOneDimension(row, col), toOneDimension(row, col + 1));
-                }
-            } else if (col == length - 1) {
-                if (isOpen(row, col - 1)) {
-                    site1.union(toOneDimension(row, col), toOneDimension(row, col - 1));
-                }
-            } else {
-                if (isOpen(row, col - 1))
-                    site1.union(toOneDimension(row, col), toOneDimension(row, col - 1));
-                if (isOpen(row, col + 1))
-                    site1.union(toOneDimension(row, col), toOneDimension(row, col + 1));
-            }// Inspect whether should union with neighbor
-            // The condition has 3 types:
-            // 1. The first column (1st column), whether union with the leftmost column (0th column).
-            // 2. The last column (n-2th row), whether union with the rightmost column (n-1th column).
-            // 3. The middle column, whether union with neighbor.
+            if (length > 1){
+                if (row == 0) {
+                    if (isOpen(row + 1, col)) {
+                        site1.union(toOneDimension(row, col), toOneDimension(row + 1, col));
+                    }
+                } else if (row == length - 1) {
+                    if (isOpen(row - 1, col)) {
+                        site1.union(toOneDimension(row, col), toOneDimension(row - 1, col));
+                    }
+                } else {
+                    if (isOpen(row - 1, col)) {
+                        site1.union(toOneDimension(row, col), toOneDimension(row - 1, col));
+                    }
+                    if (isOpen(row + 1, col)) {
+                        site1.union(toOneDimension(row, col), toOneDimension(row + 1, col));
+                    }
+                }// Inspect whether should union with neighbor
+                // The condition has 3 types:
+                // 1. The first row (1st row), whether union with the top row (0th row).
+                // 2. The last row (n-2th row), whether union with the bottom row (n-1th row).
+                // 3. The middle row, whether union with neighbor.
+                if (col == 0) {
+                    if (isOpen(row, col + 1)) {
+                        site1.union(toOneDimension(row, col), toOneDimension(row, col + 1));
+                    }
+                } else if (col == length - 1) {
+                    if (isOpen(row, col - 1)) {
+                        site1.union(toOneDimension(row, col), toOneDimension(row, col - 1));
+                    }
+                } else {
+                    if (isOpen(row, col - 1))
+                        site1.union(toOneDimension(row, col), toOneDimension(row, col - 1));
+                    if (isOpen(row, col + 1))
+                        site1.union(toOneDimension(row, col), toOneDimension(row, col + 1));
+                }// Inspect whether should union with neighbor
+                // The condition has 3 types:
+                // 1. The first column (1st column), whether union with the leftmost column (0th column).
+                // 2. The last column (n-2th row), whether union with the rightmost column (n-1th column).
+                // 3. The middle column, whether union with neighbor.
+            }
             count++;
         }
     }   // open the blockSite (row, col) if it is not open already
@@ -80,7 +84,7 @@ public class Percolation {
         if (!isOpen(row, col)){
             return false;
         }
-        return site1.find(toOneDimension(row, col)) == 0;
+        return site1.connected(0, toOneDimension(row, col));
     }// is the blockSite (row, col) full?
 
     public int numberOfOpenSites() {
@@ -88,7 +92,10 @@ public class Percolation {
     }           // number of open sites
 
     public boolean percolates() {
-        return site1.connected(0, length * length - 1);
+        if (length == 1){
+            return blockSite[0][0];
+        }
+            return site1.connected(0, length * length - 1);
     }              // does the system percolate?
 
     private int toOneDimension(int row, int col) {
