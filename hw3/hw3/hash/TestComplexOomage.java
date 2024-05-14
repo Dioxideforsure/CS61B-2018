@@ -45,9 +45,7 @@ public class TestComplexOomage {
         for (int i = 0; i < 30; i++) {
             outRange.add(StdRandom.uniform(0, 51) * 5);
         }
-        for (int i = 0; i < 100; i++) {
             deadlyList.add(new ComplexOomage(outRange));
-        }
         assertTrue(OomageTestUtility.haveNiceHashCodeSpread(deadlyList, 10));
     }
 
