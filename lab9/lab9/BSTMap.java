@@ -79,20 +79,21 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
       * Or if p is null, it returns a one node BSTMap containing (KEY, VALUE).
      */
     private Node putHelper(K key, V value, Node p) {
-        if (p == null) {// insert a new Node if p is null
-            if (p == root) {
-                root = new Node(key, value);
-            }
-            p = new Node(key, value);
-            return p;  // return the new node
-        }
         int cmp = p.key.compareTo(key);
         if (cmp == 0) { // update the value to the node
             p.value = value;
             return p;   // return the new node
         } else if (cmp > 0) {   // track to the right node
+            if (p.right == null) {  // create node if null
+                p.right = new Node(key, value);
+                return p.right;
+            }
             return putHelper(key, value, p.right);  // if the node is bigger than node's key
         } else {    // track to the left node
+            if (p.left == null) {
+                p.left = new Node(key, value);
+                return p.left;
+            }
             return putHelper(key, value, p.left);   // if the node is smaller than node's key.
         }
     }
@@ -108,7 +109,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         if (value == null) {
             throw new IllegalArgumentException("value is null!");
         }   // value should be valid
-        putHelper(key, value, root);    // call the function where the node starts from root
+        if (root == null) {
+            root = new Node(key, value);
+            size++;
+            return;
+        }   // initialize root first
+        putHelper(key, value, root);    // pass the memory to put in the correct node
         size++; // size changes
     }
 
