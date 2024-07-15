@@ -118,22 +118,18 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
-        if (leftIndex(index) >= contents.length || contents[leftIndex(index)] == null) {
+        if (leftIndex(index) >= size()) {
             return;
         }
-        if (contents[index].priority() > contents[leftIndex(index)].priority()) {
+        if (min(index, leftIndex(index)) == leftIndex(index)) {
             swap(index, leftIndex(index));
             sink(leftIndex(index));
         }
 
-        if (rightIndex(index) >= contents.length || contents[rightIndex(index)] == null) {
-            return;
-        }
-        if (contents[index].priority() > contents[rightIndex(index)].priority()) {
+        if (min(index, rightIndex(index)) == rightIndex(index)) {
             swap(index, rightIndex(index));
             sink(rightIndex(index));
         }
-        return;
     }
 
     /**
@@ -214,7 +210,6 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
             swim(index);
             sink(index);
         }
-        return;
     }
 
     /**
