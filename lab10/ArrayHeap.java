@@ -106,7 +106,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         if (index == 1) {
             return;
         }
-        if (contents[index].priority() < contents[parentIndex(index)].priority()) {
+        if (min(index, parentIndex(index)) == index) {
             swap(index, parentIndex(index));
             swim(parentIndex(index));
         }
@@ -118,11 +118,18 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
-        if (leftIndex(index) < contents.length && contents[leftIndex(index)] != null && contents[index].priority() > contents[leftIndex(index)].priority()) {
+        if (leftIndex(index) >= contents.length || contents[leftIndex(index)] == null) {
+            return;
+        }
+        if (contents[index].priority() > contents[leftIndex(index)].priority()) {
             swap(index, leftIndex(index));
             sink(leftIndex(index));
         }
-        if (rightIndex(index) < contents.length && contents[rightIndex(index)] != null && contents[index].priority() > contents[rightIndex(index)].priority()) {
+
+        if (rightIndex(index) >= contents.length || contents[rightIndex(index)] == null) {
+            return;
+        }
+        if (contents[index].priority() > contents[rightIndex(index)].priority()) {
             swap(index, rightIndex(index));
             sink(rightIndex(index));
         }
