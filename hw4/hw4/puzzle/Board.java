@@ -126,4 +126,9 @@ public class Board implements WorldState {
         }
         return neighbors;
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
