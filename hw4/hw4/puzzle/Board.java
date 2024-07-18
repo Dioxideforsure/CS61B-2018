@@ -50,6 +50,9 @@ public class Board implements WorldState {
         int manhattanCount = -1;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
+                if (tileAt(i, j) == 0) {
+                    continue;
+                }
                 if (tileAt(i, j) != i * N + j + 1) {
                     manhattanCount += Math.abs(i - (tileAt(i, j) - 1) / N) + Math.abs(j - ((tileAt(i, j) - 1) % N));
                 }
