@@ -2,6 +2,9 @@ package hw4.puzzle;
 
 import edu.princeton.cs.algs4.Queue;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Board implements WorldState {
 
     private int[][] tiles;
@@ -30,7 +33,7 @@ public class Board implements WorldState {
 
 
     public int hamming() {
-        int hammingCount = 0;
+        int hammingCount = -1;
         int expectedNumber = 1;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
@@ -44,7 +47,7 @@ public class Board implements WorldState {
     }
 
     public int manhattan() {
-        int manhattanCount = 0;
+        int manhattanCount = -1;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 if (tileAt(i, j) != i * N + j + 1) {
@@ -57,13 +60,16 @@ public class Board implements WorldState {
 
 
     public boolean equals(Object y) {
+        if (this == y) {
+            return true;
+        }
         if (y == null) {
             return false;
         }
         if (y.getClass() != this.getClass()) {
             return false;
         }
-        return ((Board) y).tiles == this.tiles;
+        return Arrays.deepEquals(((Board) y).tiles, this.tiles);
 
     }
 
