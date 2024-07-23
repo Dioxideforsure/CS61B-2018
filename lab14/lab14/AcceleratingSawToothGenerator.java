@@ -4,12 +4,12 @@ import edu.princeton.cs.introcs.StdAudio;
 import lab14lib.Generator;
 
 public class AcceleratingSawToothGenerator implements Generator {
-    private int frequency;
+    private int period;
     private int state;
     private double acceleration;
 
-    public AcceleratingSawToothGenerator(int frequency, double acceleration) {
-        this.frequency = frequency;
+    public AcceleratingSawToothGenerator(int period, double acceleration) {
+        this.period = period;
         this.acceleration = acceleration;
         state = 0;
     }
@@ -17,15 +17,14 @@ public class AcceleratingSawToothGenerator implements Generator {
     @Override
     public double next() {
         state++;
-        double period = (double) StdAudio.SAMPLE_RATE / frequency;
         if (state % period == 0) {
-            period = period * acceleration;
+            period = (int) (period * acceleration);
         }
         return normalize(period);
     }
 
 
-    private double normalize(double period) {
-        return (state % period  - period / 2) / period * 2;
+    private double normalize(int period) {
+        return (double) (state % period - period / 2) / period * 2;
     }
 }
